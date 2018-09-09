@@ -18,7 +18,7 @@ constructor(private val loggingInterceptor: HttpLoggingInterceptor,
                 .addInterceptor(keyInterceptor)
                 .addInterceptor(loggingInterceptor)
         if (BuildConfig.DEBUG) {
-            builder.addInterceptor(sleepInterceptor)
+            //builder.addInterceptor(sleepInterceptor)
         }
         return builder.build()
     }

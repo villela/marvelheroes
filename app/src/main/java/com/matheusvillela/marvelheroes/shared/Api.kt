@@ -3,6 +3,7 @@ package com.matheusvillela.marvelheroes.shared
 import com.matheusvillela.marvelheroes.model.ApiCharacter
 import io.reactivex.Single
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface Api {

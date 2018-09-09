@@ -2,8 +2,7 @@ package com.matheusvillela.marvelheroes.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.matheusvillela.marvelheroes.model.ApiCharacter
-import com.matheusvillela.marvelheroes.model.ApiCharacterDataResults
+import com.matheusvillela.marvelheroes.model.ApiCharacterDataResult
 import com.matheusvillela.marvelheroes.shared.Api
 import com.matheusvillela.marvelheroes.shared.ViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,14 +12,13 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(private val api: Api) : ViewModel() {
-    val teste = MutableLiveData<String>()
+    val characters = MutableLiveData<List<ApiCharacterDataResult>>()
+    val character = MutableLiveData<ApiCharacterDataResult>()
+    val status = MutableLiveData<ViewState>()
     private val disposables = CompositeDisposable()
-    private val characters = MutableLiveData<List<ApiCharacterDataResults>>()
-    private val status = MutableLiveData<ViewState>()
     private var currentIndex = 0
 
     init {
-        teste.value = "Teste"
         loadNextPage()
     }
 
@@ -29,7 +27,7 @@ class MainViewModel @Inject constructor(private val api: Api) : ViewModel() {
             return
         }
         status.value = ViewState.LOADING
-        disposables.add(api.characters(currentIndex, 20)
+        disposables.add(api.characters(currentIndex, 50)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ it ->
@@ -44,6 +42,14 @@ class MainViewModel @Inject constructor(private val api: Api) : ViewModel() {
                     Timber.d(it, "error getting characters")
                     status.value = ViewState.ERROR
                 }))
+    }
+
+    override fun onCleared() {
+        disposables.dispose()
+    }
+
+    fun setCharacter(character: ApiCharacterDataResult) {
+        this.character.value = character
     }
 
 }
